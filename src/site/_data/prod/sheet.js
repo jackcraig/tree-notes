@@ -24,7 +24,10 @@ module.exports = () => {
           data.content.push({
             "id": item.gsx$id.$t,
             "url": item.gsx$url.$t,
-
+            "name": item.gsx$name.$t,
+            "date": item.gsx$date.$t,
+            "notes": item.gsx$notes.$t,
+            "links": item.gsx$links.$t,            
             
           })
         });
