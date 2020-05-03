@@ -1,5 +1,6 @@
 const axios  = require('axios');
 const seed   = require('../../../utils/save-seed.js');
+// var cloudinary = require('cloudinary').v2;
 
 
 // Once a googel sheet is "published to the web" we can access its JSON

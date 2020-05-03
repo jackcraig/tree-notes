@@ -1,3 +1,5 @@
+const pluginCloudinaryImage = require( "eleventy-plugin-cloudinary" )
+
 
 module.exports = function(config) {
 
@@ -12,6 +14,12 @@ module.exports = function(config) {
 
   // use a filter for simple css minification
   config.addFilter("cssmin", require("./src/utils/minify-css.js"))
+
+  //
+  config.cloudinaryCloudName = 'jackthfc'
+
+  //
+  config.addPlugin( pluginCloudinaryImage )
 
 
   // make the seed target act like prod
