@@ -1,6 +1,3 @@
-const pluginCloudinaryImage = require( "eleventy-plugin-cloudinary" )
-
-
 module.exports = function(config) {
 
   // A useful way to reference the context we are runing eleventy in
@@ -13,14 +10,7 @@ module.exports = function(config) {
   config.addTransform("htmlmin", require("./src/utils/minify-html.js"));
 
   // use a filter for simple css minification
-  config.addFilter("cssmin", require("./src/utils/minify-css.js"))
-
-  //
-  config.cloudinaryCloudName = 'jackthfc'
-
-  //
-  config.addPlugin( pluginCloudinaryImage )
-
+  config.addFilter("cssmin", require("./src/utils/minify-css.js"));
 
   // make the seed target act like prod
   env = (env=="seed") ? "prod" : env;
