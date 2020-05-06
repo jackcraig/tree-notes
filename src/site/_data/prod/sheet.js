@@ -1,7 +1,12 @@
 const axios  = require('axios');
 const seed   = require('../../../utils/save-seed.js');
-// var cloudinary = require('cloudinary').v2;
+var cloudinary = require('cloudinary').v2;
 
+cloudinary.config({
+  cloud_name: 'xxx',
+  api_key: 123,
+  api_secret: 'xxx'
+});
 
 // Once a googel sheet is "published to the web" we can access its JSON
 // via a URL of this form. We just need to pass in the ID of the sheet
@@ -13,6 +18,15 @@ module.exports = () => {
   return new Promise((resolve, reject) => {
 
     console.log(`Requesting data from ${googleSheetUrl}`);
+
+    cloudinary.uploader.explicit('IMG_6503', 
+    { 
+    type: 'upload', 
+       image_metadata: 'true' 
+    }, function(err, data) { 
+       console.log(err);    
+       console.log(data); 
+    });
 
     axios.get(googleSheetUrl)
       .then(response => {
