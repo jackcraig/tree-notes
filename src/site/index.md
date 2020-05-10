@@ -12,6 +12,7 @@ layout: default
 <img src="https://res.cloudinary.com/jackthfc/w_400/{{ item.img }}.jpg" alt="Photo of {{ item.name }}">
   <h2>{{ item.name }} </h2>
   <p>{{ item.notes }} </p>
+  <p>{{ item.created }}</p>
 {%- endfor -%}
 </section>
 </div>

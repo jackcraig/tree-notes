@@ -1,6 +1,7 @@
 const axios  = require('axios');
 const seed   = require('../../../utils/save-seed.js');
 var cloudinary = require('cloudinary').v2;
+// const util = require('util')
 
 cloudinary.config({
   cloud_name: 'xxx',
@@ -39,32 +40,42 @@ module.exports = () => {
           data.content.push({
             "id": item.gsx$id.$t,
             "name": item.gsx$name.$t,
-            "date": item.gsx$date.$t,
             "notes": item.gsx$notes.$t,
             "links": item.gsx$links.$t, 
-            "img": item.gsx$img.$t,            
+            "img": item.gsx$img.$t,
+            "created": "",
+            "lat": "",
+            "lon": ""           
           })
         });
 
+        for(var i = 0; i < data.content.length; i++) {
+          var n = data.content[i]["img"];
+          var temp = [];
+            cloudinary.uploader.explicit(n, 
+            { 
+            type: 'upload',
+             image_metadata: 'true' 
+            }, function(err, data) { 
+             addImgData(data["public_id"], data["created_at"]);
+            });
+        }
 
-      var imgNames = [];
-
-      for(var i = 0; i < data.content.length; i++) {
-        imgNames.push(data.content[i]["img"]);
+      function addImgData(imgName, imgDate){
+        console.log(imgName, imgDate);
+        for(var i = 0; i < data.content.length; i++) {
+            if (data.content[i].img == imgName) {
+                data.content[i]["created"] = imgDate;
+                // console.log(data.content);
+                // break;
+            }
+            else {
+              finish();
+            }
+        }
       }
 
-      console.log(imgNames);
-
-      // // var found = false;
-      // for(var i = 0; i < data.content.length; i++) {
-      //     if (data.content[i].img == 'IMG_6503') {
-      //         // found = true;
-      //         data.content[i]["test"] = "jack";
-      //         break;
-      //     }
-      // }
-
-      console.log(data.content);
+      function finish(){
 
         // stash the data locally for developing without
         // needing to hit the API each time.
@@ -73,12 +84,13 @@ module.exports = () => {
         // resolve the promise and return the data
         resolve(data);
 
+        }
       })
 
       // uh-oh. Handle any errrors we might encounter
-      .catch(error => {
-        console.log('Error :', error);
-        reject(error);
-      });
+        .catch(error => {
+          console.log('Error :', error);
+          reject(error);
+        });
   })
 }
