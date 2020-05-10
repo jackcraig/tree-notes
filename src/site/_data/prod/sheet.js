@@ -19,14 +19,14 @@ module.exports = () => {
 
     console.log(`Requesting data from ${googleSheetUrl}`);
 
-    cloudinary.uploader.explicit('IMG_6503', 
-    { 
-    type: 'upload', 
-       image_metadata: 'true' 
-    }, function(err, data) { 
-       console.log(err);    
-       console.log(data); 
-    });
+    // cloudinary.uploader.explicit('IMG_6503', 
+    // { 
+    // type: 'upload', 
+    //    image_metadata: 'true' 
+    // }, function(err, data) { 
+    //    console.log(err);    
+    //    console.log(data); 
+    // });
 
     axios.get(googleSheetUrl)
       .then(response => {
@@ -45,6 +45,17 @@ module.exports = () => {
             "img": item.gsx$img.$t,            
           })
         });
+
+      var found = false;
+      for(var i = 0; i < data.content.length; i++) {
+          if (data.content[i].img == 'IMG_6503') {
+              found = true;
+              data.content[i]["test"] = "jack";
+              break;
+          }
+      }
+
+      console.log(data.content);
 
         // stash the data locally for developing without
         // needing to hit the API each time.
