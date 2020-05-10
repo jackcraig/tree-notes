@@ -46,14 +46,23 @@ module.exports = () => {
           })
         });
 
-      var found = false;
+
+      var imgNames = [];
+
       for(var i = 0; i < data.content.length; i++) {
-          if (data.content[i].img == 'IMG_6503') {
-              found = true;
-              data.content[i]["test"] = "jack";
-              break;
-          }
+        imgNames.push(data.content[i]["img"]);
       }
+
+      console.log(imgNames);
+
+      // // var found = false;
+      // for(var i = 0; i < data.content.length; i++) {
+      //     if (data.content[i].img == 'IMG_6503') {
+      //         // found = true;
+      //         data.content[i]["test"] = "jack";
+      //         break;
+      //     }
+      // }
 
       console.log(data.content);
 
