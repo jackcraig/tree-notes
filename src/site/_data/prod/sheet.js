@@ -65,7 +65,9 @@ module.exports = () => {
         console.log(imgName, imgDate);
         for(var i = 0; i < data.content.length; i++) {
             if (data.content[i].img == imgName) {
-                data.content[i]["created"] = imgDate;
+                var convertDate = new Date(imgDate).toUTCString();
+                convertDate = convertDate.split(' ').slice(1, 4).join(' ');
+                data.content[i]["created"] = convertDate;
                 // console.log(data.content);
                 // break;
             }
