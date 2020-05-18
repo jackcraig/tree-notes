@@ -56,19 +56,21 @@ module.exports = () => {
             { 
             type: 'upload',
              image_metadata: 'true' 
-            }, function(err, data) { 
-             addImgData(data["public_id"], data["created_at"]);
+            }, function(err, metadata) { 
+             // console.log(data.image_metadata["DateTimeOriginal"]);
+             addImgData(metadata["public_id"], metadata.image_metadata["DateTimeOriginal"]);
             });
+            // console.log(i);
         }
 
       function addImgData(imgName, imgDate){
-        console.log(imgName, imgDate);
+        // console.log(imgName, imgDate);
         for(var i = 0; i < data.content.length; i++) {
             if (data.content[i].img == imgName) {
-                var convertDate = new Date(imgDate).toUTCString();
+                var convertDate = new Date(imgDate.slice(0,4) + "-" + imgDate.slice(5,7) + "-" + imgDate.slice(8,10)).toUTCString();
                 convertDate = convertDate.split(' ').slice(1, 4).join(' ');
                 data.content[i]["created"] = convertDate;
-                // console.log(data.content);
+                // console.log(imgName + " " + convertDate);
                 // break;
             }
             else {
