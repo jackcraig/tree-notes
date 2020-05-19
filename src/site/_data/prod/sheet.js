@@ -1,5 +1,5 @@
-const axios  = require('axios');
-const seed   = require('../../../utils/save-seed.js');
+const axios = require('axios');
+const seed = require('../../../utils/save-seed.js');
 var cloudinary = require('cloudinary').v2;
 // const util = require('util')
 
@@ -41,60 +41,63 @@ module.exports = () => {
             "id": item.gsx$id.$t,
             "name": item.gsx$name.$t,
             "notes": item.gsx$notes.$t,
-            "links": item.gsx$links.$t, 
+            "links": item.gsx$links.$t,
             "img": item.gsx$img.$t,
             "created": "",
             "lat": "",
-            "lon": ""           
+            "lon": ""
           })
         });
 
-        for(var i = 0; i < data.content.length; i++) {
+        for (var i = 0; i < data.content.length; i++) {
           var n = data.content[i]["img"];
-          var temp = [];
-            cloudinary.uploader.explicit(n, 
-            { 
+
+          cloudinary.uploader.explicit(n, {
             type: 'upload',
-             image_metadata: 'true' 
-            }, function(err, metadata) { 
-             // console.log(data.image_metadata["DateTimeOriginal"]);
-             addImgData(metadata["public_id"], metadata.image_metadata["DateTimeOriginal"]);
-            });
-            // console.log(i);
+            image_metadata: 'true'
+          }, function(err, metadata) {
+            addImgData(metadata["public_id"], metadata.image_metadata["DateTimeOriginal"]);
+          });
         }
 
-      function addImgData(imgName, imgDate){
-        // console.log(imgName, imgDate);
-        for(var i = 0; i < data.content.length; i++) {
-            if (data.content[i].img == imgName) {
-                var convertDate = new Date(imgDate.slice(0,4) + "-" + imgDate.slice(5,7) + "-" + imgDate.slice(8,10)).toUTCString();
-                convertDate = convertDate.split(' ').slice(1, 4).join(' ');
-                data.content[i]["created"] = convertDate;
-                // console.log(imgName + " " + convertDate);
-                // break;
-            }
-            else {
-              finish();
-            }
+        // counter to track how many API calls and addImgData functions have been completed. 
+        var j = 0;
+
+        function addImgData(imgName, imgDate) {
+          for(var i = 0; i < data.content.length; i++) {
+              if (data.content[i].img == imgName) {
+                  var convertDate = new Date(imgDate.slice(0,4) + "-" + imgDate.slice(5,7) + "-" + imgDate.slice(8,10)).toUTCString();
+                  convertDate = convertDate.split(' ').slice(1, 4).join(' ');
+                  data.content[i]["created"] = convertDate;
+                  j++;
+                  console.log(imgName + " " + convertDate);
+                  console.log(j);
+
+                  // once it's looped through every item we can call finish() 
+                  if (j == data.content.length){
+                    finish();
+                  }
+                  break;
+              }
+          }
         }
-      }
 
-      function finish(){
+        function finish() {
+          // stash the data locally for developing without
+          // needing to hit the API each time.
+          seed(JSON.stringify(data), `${__dirname}/../dev/sheet.json`);
 
-        // stash the data locally for developing without
-        // needing to hit the API each time.
-        seed(JSON.stringify(data), `${__dirname}/../dev/sheet.json`);
-
-        // resolve the promise and return the data
-        resolve(data);
-
+          // resolve the promise and return the data
+          resolve(data);
+          console.log("All done");
         }
+
       })
 
       // uh-oh. Handle any errrors we might encounter
-        .catch(error => {
-          console.log('Error :', error);
-          reject(error);
-        });
+      .catch(error => {
+        console.log('Error :', error);
+        reject(error);
+      });
   })
 }
